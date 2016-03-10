@@ -68,13 +68,7 @@ class ResponseFactory(object):
     """
     ResponseFactory. Class for build reponses
     """
-
-    PREFIX_0 = "_0"
     NAMESPACE_0 = "http://idempiere.org/ADInterface/1_0"
-    PREFIX_SOAPENV = "soapenv"
-    NAMESPACE_SOAPENV = "http://schemas.xmlsoap.org/soap/envelope/"
-    ATTRIBUTE_XMLNS = "xmlns"
-    NAMESPACE_XMLNS = "http://www.w3.org/2000/xmlns/"
     RESPONSE_DEFINITION = ('compositeOperationResponse', 'createDataResponse', 'createUpdateDataResponse',
                            'deleteDataResponse', 'setDocActionResponse', 'getListResponse', 'queryDataResponse',
                            'readDataResponse', 'runProcessResponse', 'updateDataResponse')
@@ -138,7 +132,7 @@ class ResponseFactory(object):
 
         standard_response = standard_responses[0]
         response.record_id = standard_response.get('RecordID')
-        is_error = True if standard_response.get('IsError').lower() in ('true', 'yes') else False
+        is_error = True if str(standard_response.get('IsError')).lower() in ('true', 'yes') else False
 
         if is_error:
             response.status = idempierewsc.enums.WebServiceResponseStatus.Error
@@ -155,7 +149,32 @@ class ResponseFactory(object):
         return response
 
     def create_composite_response(self, response, xml_response):
-        pass
+        standard_responses = self.find_elements_0(xml_response, 'StandardResponse')
+
+        for sr in standard_responses:
+            wtd_responses = self.find_elements_0(sr, 'WindowTabData')
+            process_responses = self.find_elements_0(xml_response, 'RunProcessResponse')
+
+            if len(wtd_responses) > 0:
+                temp_element = lxml.etree.Element("temp")
+                temp_element.append(wtd_responses[0])
+                partial_response = self.create_window_tab_data_response(WindowTabDataResponse(), temp_element)
+            elif len(process_responses) > 0:
+                temp_element = lxml.etree.Element("temp")
+                temp_element.append(wtd_responses[0])
+                partial_response = self.create_run_process_response(RunProcessResponse(), temp_element)
+            else:
+                temp_element = lxml.etree.Element("temp")
+                temp_element.append(sr)
+                partial_response = self.create_standard_response(StandardResponse(), temp_element)
+
+            if not partial_response or partial_response.status == idempierewsc.enums.WebServiceResponseStatus.Error:
+                response.status = idempierewsc.enums.WebServiceResponseStatus.Error
+                response.error_message = partial_response.error_message
+
+            response.responses.append(partial_response)
+
+        return response
 
     def create_run_process_response(self, response, xml_response):
         process_responses = self.find_elements_0(xml_response, 'RunProcessResponse')
@@ -164,7 +183,7 @@ class ResponseFactory(object):
             return response
 
         process_response = process_responses[0]
-        is_error = True if process_response.get('IsError').lower() in ('true', 'yes') else False
+        is_error = True if str(process_response.get('IsError')).lower() in ('true', 'yes') else False
 
         if is_error:
             response.status = idempierewsc.enums.WebServiceResponseStatus.Error
@@ -226,10 +245,3 @@ class ResponseFactory(object):
                         field.value = values[0].text
 
         return response
-
-
-factory = ResponseFactory()
-xml = lxml.etree.parse("../documents/QueryBPartnerTest_response.xml")
-r = factory.create_response(idempierewsc.enums.WebServiceResponseModel.WindowTabDataResponse, xml)
-print(r.status)
-print(r.data_set)
