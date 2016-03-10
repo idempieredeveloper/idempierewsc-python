@@ -67,5 +67,3 @@ for element in root.iter():
     break
 
 
-
-print(bool(None))

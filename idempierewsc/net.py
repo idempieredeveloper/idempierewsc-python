@@ -72,7 +72,7 @@ class WebServiceConnection(object):
         """
         if self.request is None:
             return ''
-        return '/ADInterface/services/{}'.format(self.request.web_service_definition())
+        return 'ADInterface/services/{}'.format(self.request.web_service_definition().value)
 
     def web_service_url(self):
         """
@@ -108,9 +108,9 @@ class WebServiceConnection(object):
         if isinstance(request, idempierewsc.base.WebServiceRequest):
             self.request = request
             factory = idempierewsc.request.RequestFactory()
-            self.xml_request = factory.build_request(request)
+            self.xml_request = factory.create_request(request)
             data_request = lxml.etree.tostring(self.xml_request, encoding=self.ENCODING_UTF_8)
-            response_model = request.web_service_response_model
+            response_model = request.web_service_response_model()
         else:
             self.request = None
             data_request = request

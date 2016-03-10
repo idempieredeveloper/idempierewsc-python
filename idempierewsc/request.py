@@ -219,13 +219,13 @@ class RequestFactory(object):
     def create_element_0(self, name, text=None):
         element = lxml.etree.Element('{%s}%s' % (self.NAMESPACE_0, name))
         if text:
-            element.text = text
+            element.text = str(text)
         return element
 
     def create_element_soapenv(self, name, text=None):
         element = lxml.etree.Element('{%s}%s' % (self.NAMESPACE_SOAPENV, name))
         if text:
-            element.text = text
+            element.text = str(text)
         return element
 
     def create_request(self, wsr):
