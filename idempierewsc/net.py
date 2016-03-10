@@ -109,11 +109,13 @@ class WebServiceConnection(object):
             self.request = request
             factory = idempierewsc.request.RequestFactory()
             self.xml_request = factory.build_request(request)
-            data_request = lxml.etree.tostring(self.xml_request, encoding='UTF-8')
+            data_request = lxml.etree.tostring(self.xml_request, encoding=self.ENCODING_UTF_8)
             response_model = request.web_service_response_model
         else:
+            self.request = None
             data_request = request
             response_model = None
+            self.xml_request = lxml.etree.fromstring(data_request)
 
         self.attempts_request = 0
         start_time = int(time.time() * 1000.)
@@ -149,6 +151,10 @@ class WebServiceConnection(object):
 
         self.xml_response = lxml.etree.fromstring(data_response)
         factory = idempierewsc.response.ResponseFactory()
+
+        if not response_model:
+            return data_response
+
         return factory.create_response(response_model, self.xml_response)
 
     def print_xml_request(self):

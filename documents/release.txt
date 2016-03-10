@@ -1,12 +1,11 @@
-- In branch dev
+- In branch develop
 - Change Version in __init__.py
 - Change Version in setup.py
+- Change Version Tag in README
 - Verify requirements.txt
 - Commit
-- In branch release
-- Merge with dev
-- Change Version Tag in README
-- Commit in branch release
-- Update to dev 
-- Add tag of release
+- In branch master
+- Merge with develop
+- Commit in branch master
+- Add tag of master
 - Push
