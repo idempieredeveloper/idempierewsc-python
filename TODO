@@ -1,7 +1,7 @@
 - [x] Improve management of secure connection
 - [ ] Improve management of proxy connection
 - [x] Improve Connections Attempts
-- [ ] Test UTF-8 Xml Response
+- [x] Test UTF-8 Xml Response
 - [x] Setup.py
 - [ ] Source Documentation
 - [ ] Test on python 3

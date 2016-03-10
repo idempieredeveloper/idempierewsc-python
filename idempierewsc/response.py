@@ -64,5 +64,36 @@ class WindowTabDataResponse(idempierewsc.base.WebServiceResponse):
 
 
 class ResponseFactory(object):
-    def create_response(self, xml_response):
+    """
+    ResponseFactory. Class for build reponses
+    """
+
+    def create_response(self, response_model, xml_response):
+        if not response_model:
+            return xml_response
+
+        if response_model == idempierewsc.enums.WebServiceResponseModel.StandardResponse:
+            return self.create_standard_response(xml_response)
+        elif response_model == idempierewsc.enums.WebServiceResponseModel.CompositeResponse:
+            return self.create_composite_response(xml_response)
+        elif response_model == idempierewsc.enums.WebServiceResponseModel.RunProcessResponse:
+            return self.create_run_process_response(xml_response)
+        elif response_model == idempierewsc.enums.WebServiceResponseModel.WindowTabDataResponse:
+            return self.create_window_tab_data_response(xml_response)
+
+        return None
+
+    def has_fault_error(self, response, xml_response):
+        pass
+
+    def create_composite_response(self, xml_response):
+        pass
+
+    def create_run_process_response(self, xml_response):
+        pass
+
+    def create_standard_response(self, xml_response):
+        pass
+
+    def create_window_tab_data_response(self, xml_response):
         pass

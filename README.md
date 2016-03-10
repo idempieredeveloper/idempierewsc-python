@@ -16,7 +16,7 @@ Features
 - License: LGPL 3 http://www.gnu.org/licenses/lgpl-3.0.html
 - Language: Python 2.x
 - IDE: PyCharm
-- Branch: develop
+- Version: v1.0.0
 
 
 Documentation

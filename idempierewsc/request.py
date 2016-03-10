@@ -432,14 +432,3 @@ class RequestFactory(object):
             field.append(self.create_element_0('val', temp_value))
 
         return field
-
-
-qd = QueryDataRequest()
-qd.login.user = 'SuperUser'
-field = idempierewsc.base.Field()
-field.value = 'Saùl'
-
-qd.data_row.append(field)
-root = RequestFactory().create_request(qd)
-st = lxml.etree.tostring(root, pretty_print=True, encoding="UTF-8")
-print(st.decode('utf-8'))

@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import idempierewsc.net
+from idempierewsc.net import WebServiceConnection
 
 url = 'http://localhost:8031/ADInterface/services/ModelADService'
 urls = 'https://localhost:8431/ADInterface/services/ModelADService'
@@ -32,15 +32,16 @@ def test_xml():
 request = test_xml()
 print('Request:\n' + request)
 
-wsc = idempierewsc.net.WebServiceConnection()
+wsc = WebServiceConnection()
 wsc.url = urls
 wsc.attempts = 3
 try:
-    response = wsc.send_string(request)
+    response = wsc.send_request(request)
 except Exception as e:
-    pass
+    print('Error'+e.message)
 else:
-    print(response)
+    wsc.print_xml_response()
 finally:
     print(wsc.attempts_request)
     print(wsc.time_request)
+    print(wsc.response_status)

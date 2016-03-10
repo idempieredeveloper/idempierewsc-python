@@ -40,6 +40,7 @@ class WebServiceConnection(object):
     DEFAULT_TIMEOUT = 5000
     DEFAULT_ATTEMPTS = 1
     DEFAULT_ATTEMPTS_TIMEOUT = 500
+    ENCODING_UTF_8 = 'UTF-8'
 
     def __init__(self):
         self.attempts = self.DEFAULT_ATTEMPTS
@@ -109,8 +110,10 @@ class WebServiceConnection(object):
             factory = idempierewsc.request.RequestFactory()
             self.xml_request = factory.build_request(request)
             data_request = lxml.etree.tostring(self.xml_request, encoding='UTF-8')
+            response_model = request.web_service_response_model
         else:
             data_request = request
+            response_model = None
 
         self.attempts_request = 0
         start_time = int(time.time() * 1000.)
@@ -124,6 +127,10 @@ class WebServiceConnection(object):
                                   headers={self.CONTENT_TYPE_HEADER: self.CONTENT_TYPE,
                                            self.USE_AGENT_HEADER: self.user_agent()},
                                   verify=False, timeout=(float(self.timeout) / 1000.))
+
+                if r.status_code != requests.codes.ok:
+                    r.raise_for_status()
+
                 data_response = r.text
                 self.response_status = r.status_code
                 successful = True
@@ -142,22 +149,24 @@ class WebServiceConnection(object):
 
         self.xml_response = lxml.etree.fromstring(data_response)
         factory = idempierewsc.response.ResponseFactory()
-        return factory.create_response(self.xml_response)
+        return factory.create_response(response_model, self.xml_response)
 
     def print_xml_request(self):
-        st = lxml.etree.tostring(self.xml_request, pretty_print=True, encoding="UTF-8")
-        print(st.decode('utf-8'))
+        st = lxml.etree.tostring(self.xml_request, pretty_print=True, encoding=self.ENCODING_UTF_8)
+        print(st.decode(self.ENCODING_UTF_8))
 
     def print_xml_response(self):
-        st = lxml.etree.tostring(self.xml_response, pretty_print=True, encoding="UTF-8")
-        print(st.decode('utf-8'))
+        st = lxml.etree.tostring(self.xml_response, pretty_print=True, encoding=self.ENCODING_UTF_8)
+        print(st.decode(self.ENCODING_UTF_8))
 
     def save_xml_request(self, file_name):
-        file = open(file_name, 'w')
-        file.write(lxml.etree.tostring(self.xml_request, pretty_print=True, encoding="UTF-8").decode('utf-8'))
-        file.close()
+        save_file = open(file_name, 'w')
+        save_file.write(lxml.etree.tostring(self.xml_request, pretty_print=True, encoding=self.ENCODING_UTF_8).decode(
+                self.ENCODING_UTF_8))
+        save_file.close()
 
     def save_xml_response(self, file_name):
-        file = open(file_name, 'w')
-        file.write(lxml.etree.tostring(self.xml_response, pretty_print=True, encoding="UTF-8").decode('utf-8'))
-        file.close()
+        save_file = open(file_name, 'w')
+        save_file.write(lxml.etree.tostring(self.xml_response, pretty_print=True, encoding=self.ENCODING_UTF_8).decode(
+                self.ENCODING_UTF_8))
+        save_file.close()
