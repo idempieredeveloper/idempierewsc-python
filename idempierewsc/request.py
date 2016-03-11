@@ -217,21 +217,43 @@ class RequestFactory(object):
     NSMAP = {PREFIX_0: NAMESPACE_0, PREFIX_SOAPENV: NAMESPACE_SOAPENV}
 
     def create_element_0(self, name, text=None):
+        """
+        Create element NAMESPACE_0 = "http://idempiere.org/ADInterface/1_0"
+        :param name: Node
+        :param text: Node text
+        :return: Element
+        """
         element = lxml.etree.Element('{%s}%s' % (self.NAMESPACE_0, name))
         if text:
             element.text = str(text)
         return element
 
     def create_element_soapenv(self, name, text=None):
+        """
+        Create element NAMESPACE_SOAPENV = "http://schemas.xmlsoap.org/soap/envelope/"
+        :param name: Node
+        :param text: Node text
+        :return: Element
+        """
         element = lxml.etree.Element('{%s}%s' % (self.NAMESPACE_SOAPENV, name))
         if text:
             element.text = str(text)
         return element
 
     def create_request(self, wsr):
+        """
+        Create request
+        :param wsr: Web Service
+        :return: Xml Request
+        """
         return self.build_document(wsr)
 
     def build_document(self, wsr):
+        """
+        Build xml document
+        :param wsr: Web Service
+        :return: Xml Request
+        """
         doc = lxml.etree.Element('{%s}%s' % (self.NAMESPACE_SOAPENV, 'Envelope'), nsmap=self.NSMAP)
         doc.append(self.create_element_soapenv('Header'))
         node_body = self.create_element_soapenv('Body')
@@ -242,6 +264,11 @@ class RequestFactory(object):
         return doc
 
     def build_request(self, wsr):
+        """
+        Build especific request
+        :param wsr: Web Service
+        :return: Xml Request
+        """
         request = self.create_element_0(wsr.web_service_request_model().value)
 
         if wsr.web_service_request_model() == idempierewsc.enums.WebServiceRequestModel.CompositeRequest:
@@ -254,6 +281,11 @@ class RequestFactory(object):
         return request
 
     def build_login(self, log):
+        """
+        Build xml login
+        :param log: Login request
+        :return: Xml login
+        """
         login = self.create_element_0('ADLoginRequest')
 
         if log.user:
@@ -287,6 +319,11 @@ class RequestFactory(object):
         return login
 
     def build_model(self, wsr):
+        """
+        Build model for request
+        :param wsr: Web Services
+        :return: Xml Model
+        """
         if wsr.web_service_request_model() == idempierewsc.enums.WebServiceRequestModel.CompositeRequest:
             model = self.create_element_0('operations')
             if wsr.operations:
@@ -376,6 +413,11 @@ class RequestFactory(object):
         return self.create_element_0('NoModel')
 
     def build_operation(self, oper):
+        """
+        Build operation xml for Composite
+        :param oper: Operation
+        :return: Xml operation
+        """
         operation = self.create_element_0('operation')
         operation.set('preCommit', str(oper.pre_commit).lower())
         operation.set('postCommit', str(oper.post_commit).lower())
@@ -384,18 +426,33 @@ class RequestFactory(object):
         return operation
 
     def build_data_row(self, row):
+        """
+        Build row
+        :param row: Data for row
+        :return: Xml Row
+        """
         data_row = self.create_element_0('DataRow')
         for i in row:
             data_row.append(self.build_field(i))
         return data_row
 
     def build_param_values(self, params):
+        """
+        Build row for params
+        :param params: Params
+        :return: Xml for params
+        """
         param_values = self.create_element_0('ParamValues')
         for i in params:
             param_values.append(self.build_field(i))
         return param_values
 
     def build_field(self, f):
+        """
+        Build fields
+        :param f: Field
+        :return: Xml Field
+        """
         field = self.create_element_0('field')
 
         if f.column:

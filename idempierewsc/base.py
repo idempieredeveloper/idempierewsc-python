@@ -56,15 +56,28 @@ class Field(object):
         self.error_val = ''
 
     def set_byte_value(self, val):
+        """
+        Convert byte to base 64
+        :param val: Value to Base 64
+        :return: None
+        """
         if val:
             self.value = base64.b64encode(val)
 
     def get_byte_value(self):
+        """
+        Convert base 64 to byte
+        :return: Base64
+        """
         if self.value:
             return base64.b64decode(self.value)
         return ''
 
     def get_boolean_value(self):
+        """
+        Convert value to boolean
+        :return: Boolean
+        """
         if self.value:
             temp_value = str(self.value).upper()
 
@@ -76,21 +89,37 @@ class Field(object):
         return ''
 
     def get_type(self):
+        """
+        Gets de type of value
+        :return: Type of value
+        """
         return type(self.value)
 
     def get_date_value(self):
+        """
+        Convert the value to Date
+        :return: Date
+        """
         if self.value:
             temp_value = str(self.value)
             return datetime.datetime.strptime(temp_value, '%Y-%m-%d %H:%M:%S')
         return ''
 
     def get_doc_status_value(self):
+        """
+        Convert the value to DocStatus
+        :return: DocStatus
+        """
         if self.value:
             temp_value = str(self.value)
             return idempierewsc.enums.DocStatus(temp_value)
         return ''
 
     def get_doc_action_value(self):
+        """
+        Convert the value to DocAction
+        :return: DocAction
+        """
         if self.value:
             temp_value = str(self.value)
             return idempierewsc.enums.DocAction(temp_value)

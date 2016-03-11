@@ -97,8 +97,8 @@ class WebServiceConnection(object):
     def send_request(self, request):
         """
         Send data request
-        :param request: Data request (string)
-        :return: Response (string)
+        :param request: Data request
+        :return: Response
         """
         if not self.web_service_url():
             raise WebServiceConnection('URL must be different than empty or null')
@@ -158,20 +158,38 @@ class WebServiceConnection(object):
         return factory.create_response(response_model, self.xml_response)
 
     def print_xml_request(self):
+        """
+        Print the request
+        :return: None
+        """
         st = lxml.etree.tostring(self.xml_request, pretty_print=True, encoding=self.ENCODING_UTF_8)
         print(st.decode(self.ENCODING_UTF_8))
 
     def print_xml_response(self):
+        """
+        Print the response
+        :return: None
+        """
         st = lxml.etree.tostring(self.xml_response, pretty_print=True, encoding=self.ENCODING_UTF_8)
         print(st.decode(self.ENCODING_UTF_8))
 
     def save_xml_request(self, file_name):
+        """
+        Save the request to file
+        :param file_name: File to save
+        :return: None
+        """
         save_file = open(file_name, 'w')
         save_file.write(lxml.etree.tostring(self.xml_request, pretty_print=True, encoding=self.ENCODING_UTF_8).decode(
                 self.ENCODING_UTF_8))
         save_file.close()
 
     def save_xml_response(self, file_name):
+        """
+        Save the response to file
+        :param file_name: File to save
+        :return: None
+        """
         save_file = open(file_name, 'w')
         save_file.write(lxml.etree.tostring(self.xml_response, pretty_print=True, encoding=self.ENCODING_UTF_8).decode(
                 self.ENCODING_UTF_8))

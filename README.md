@@ -19,8 +19,8 @@ Features
 - Version: v1.0.0
 
 
-Documentation
--------------
+Links
+-----
 - iDempiere Webservices: http://wiki.idempiere.org/en/Web_services
 
 
@@ -28,3 +28,7 @@ Instalation
 -----------
 - `$ git clone https://github.com/sauljabin/idempierewsc-python idempierewsc`
 - `$ pip install -e idempierewsc`
+
+
+Documentation
+-------------

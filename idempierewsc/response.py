@@ -25,6 +25,10 @@ import copy
 
 
 class CompositeResponse(idempierewsc.base.WebServiceResponse):
+    """
+    Composite class response
+    """
+
     def __init__(self):
         super(CompositeResponse, self).__init__()
         self.responses = []
@@ -34,6 +38,10 @@ class CompositeResponse(idempierewsc.base.WebServiceResponse):
 
 
 class RunProcessResponse(idempierewsc.base.WebServiceResponse):
+    """
+    Run process class response
+    """
+
     def __init__(self):
         super(RunProcessResponse, self).__init__()
         self.log_info = ''
@@ -44,6 +52,10 @@ class RunProcessResponse(idempierewsc.base.WebServiceResponse):
 
 
 class StandardResponse(idempierewsc.base.WebServiceResponse):
+    """
+    Standard response class
+    """
+
     def __init__(self):
         super(StandardResponse, self).__init__()
         self.record_id = 0
@@ -54,6 +66,10 @@ class StandardResponse(idempierewsc.base.WebServiceResponse):
 
 
 class WindowTabDataResponse(idempierewsc.base.WebServiceResponse):
+    """
+    Window tab response class for query
+    """
+
     def __init__(self):
         super(WindowTabDataResponse, self).__init__()
         self.num_rows = 0
@@ -67,7 +83,7 @@ class WindowTabDataResponse(idempierewsc.base.WebServiceResponse):
 
 class ResponseFactory(object):
     """
-    ResponseFactory. Class for build reponses
+    ResponseFactory. Class for build responses
     """
     NAMESPACE_0 = "http://idempiere.org/ADInterface/1_0"
     RESPONSE_DEFINITION = ('compositeOperationResponse', 'createDataResponse', 'createUpdateDataResponse',
@@ -77,9 +93,21 @@ class ResponseFactory(object):
     BODY_DEFINITION = ('Envelope', 'Body')
 
     def find_elements_0(self, root, name):
+        """
+        Find elements into xml document
+        :param root: Xml element
+        :param name: Element to find
+        :return: Elements
+        """
         return root.findall('.//{%s}%s' % (self.NAMESPACE_0, name))
 
     def create_response(self, response_model, xml_response):
+        """
+        Create response from xml document
+        :param response_model: Response object
+        :param xml_response: xml raw
+        :return: Response object
+        """
 
         if response_model == idempierewsc.enums.WebServiceResponseModel.StandardResponse:
             operation = self.create_standard_response
@@ -111,6 +139,12 @@ class ResponseFactory(object):
         return None
 
     def has_fault_error(self, response, xml_response):
+        """
+        Find fault error from xml
+        :param response: Response object
+        :param xml_response: Raw xml
+        :return: Response
+        """
         response.status = idempierewsc.enums.WebServiceResponseStatus.Error
 
         for element in xml_response.iter():
@@ -126,6 +160,12 @@ class ResponseFactory(object):
         return response
 
     def create_standard_response(self, response, xml_response):
+        """
+        Creates standard response object
+        :param response: Response object
+        :param xml_response: Raw xml
+        :return: StandardResponse
+        """
         standard_responses = self.find_elements_0(xml_response, 'StandardResponse')
 
         if len(standard_responses) <= 0:
@@ -150,6 +190,12 @@ class ResponseFactory(object):
         return response
 
     def create_composite_response(self, response, xml_response):
+        """
+        Build composite response
+        :param response: Response object
+        :param xml_response: Raw xml
+        :return: CompositeResponse
+        """
         standard_responses = self.find_elements_0(xml_response, 'StandardResponse')
 
         for sr in standard_responses:
@@ -178,6 +224,12 @@ class ResponseFactory(object):
         return response
 
     def create_run_process_response(self, response, xml_response):
+        """
+        Build run process response
+        :param response: Response object
+        :param xml_response: Raw xml
+        :return: RunProcessResponse
+        """
         process_responses = self.find_elements_0(xml_response, 'RunProcessResponse')
 
         if len(process_responses) <= 0:
@@ -204,6 +256,12 @@ class ResponseFactory(object):
         return response
 
     def create_window_tab_data_response(self, response, xml_response):
+        """
+        Build windows tab response for query request
+        :param response: Response object
+        :param xml_response: Raw xml
+        :return: WindowTabResponse
+        """
         wtd_responses = self.find_elements_0(xml_response, 'WindowTabData')
 
         if len(wtd_responses) <= 0:
