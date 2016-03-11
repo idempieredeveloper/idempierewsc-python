@@ -5,8 +5,9 @@ Description
 -----------
 iDempiere Python WebService Client is a Soap Client for
 iDempiere ERP (http://www.idempiere.org).
-Data GardenWorld documents/Test WebServices 2Pack.zip.
 It allows the programmer to abstract the generation of XML requests, making development easier. This implementation can be used in Python 2.7, see requirements.txt file.
+
+Data GardenWorld documents/Test WebServices 2Pack.zip.
 Examples are available in the sandbox folder.
 
 
