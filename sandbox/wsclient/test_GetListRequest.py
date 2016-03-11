@@ -18,7 +18,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from idempierewsc.request import QueryDataRequest
+from idempierewsc.request import GetListRequest
 from idempierewsc.base import LoginRequest
 from idempierewsc.enums import WebServiceResponseStatus
 from idempierewsc.net import WebServiceConnection
@@ -34,11 +34,11 @@ login.role_id = 102
 login.password = 'System'
 login.user = 'SuperUser'
 
-query = QueryDataRequest()
-query.web_service_type = 'QueryBPartnerTest'
-query.offset = 2
-query.limit = 5
-query.login = login
+ws = GetListRequest()
+ws.web_service_type = 'GetListTest'
+ws.login = login
+ws.ad_reference_id = 350
+
 
 wsc = WebServiceConnection()
 wsc.url = urls
@@ -46,7 +46,7 @@ wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
 try:
-    response = wsc.send_request(query)
+    response = wsc.send_request(ws)
     wsc.print_xml_request()
     wsc.print_xml_response()
 
@@ -62,7 +62,7 @@ try:
                 print(str(field.column) + ': ' + str(field.value))
             print('')
         print('---------------------------------------------')
-        print('Web Service Type: ' + query.web_service_type)
+        print('Web Service Type: ' + ws.web_service_type)
         print('Attempts: ' + str(wsc.attempts_request))
         print('Time: ' + str(wsc.time_request))
 except:

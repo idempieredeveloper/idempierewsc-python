@@ -45,9 +45,9 @@ class Field(object):
     Class to abstract the iDempiere Web Service Login
     """
 
-    def __init__(self):
-        self.value = None
-        self.column = ''
+    def __init__(self, column='', value=''):
+        self.value = value
+        self.column = column
         self.type = ''
         self.lval = ''
         self.disp = None
@@ -102,10 +102,10 @@ class Operation(object):
     Operation For composite operation
     """
 
-    def __init__(self):
-        self.web_service = ''
-        self.pre_commit = False
-        self.post_commit = False
+    def __init__(self, web_service=None, pre_commit=False, post_commit=False):
+        self.web_service = web_service
+        self.pre_commit = pre_commit
+        self.post_commit = post_commit
 
 
 class WebServiceResponse(object):

@@ -18,9 +18,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from idempierewsc.request import QueryDataRequest
+from idempierewsc.request import SetDocActionRequest
 from idempierewsc.base import LoginRequest
 from idempierewsc.enums import WebServiceResponseStatus
+from idempierewsc.enums import DocAction
 from idempierewsc.net import WebServiceConnection
 import traceback
 
@@ -34,11 +35,11 @@ login.role_id = 102
 login.password = 'System'
 login.user = 'SuperUser'
 
-query = QueryDataRequest()
-query.web_service_type = 'QueryBPartnerTest'
-query.offset = 2
-query.limit = 5
-query.login = login
+ws = SetDocActionRequest()
+ws.web_service_type = 'DocActionInvoiceTest'
+ws.login = login
+ws.doc_action = DocAction.Complete
+ws.record_id = 1000002
 
 wsc = WebServiceConnection()
 wsc.url = urls
@@ -46,23 +47,16 @@ wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
 try:
-    response = wsc.send_request(query)
+    response = wsc.send_request(ws)
     wsc.print_xml_request()
     wsc.print_xml_response()
 
     if response.status == WebServiceResponseStatus.Error:
         print('Error: ' + response.error_message)
     else:
-        print('Total Rows: ' + str(response.total_rows))
-        print('Num rows: ' + str(response.num_rows))
-        print('Start row: ' + str(response.start_row))
-        print('')
-        for row in response.data_set:
-            for field in row:
-                print(str(field.column) + ': ' + str(field.value))
-            print('')
+        print('RecordID: ' + str(response.record_id))
         print('---------------------------------------------')
-        print('Web Service Type: ' + query.web_service_type)
+        print('Web Service Type: ' + ws.web_service_type)
         print('Attempts: ' + str(wsc.attempts_request))
         print('Time: ' + str(wsc.time_request))
 except:

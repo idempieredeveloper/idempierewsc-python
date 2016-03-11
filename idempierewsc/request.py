@@ -367,7 +367,11 @@ class RequestFactory(object):
                 model.append(self.create_element_0('recordIDVariable', wsr.record_id_variable))
 
             if wsr.doc_action:
-                model.append(self.create_element_0('docAction', wsr.doc_action))
+                if isinstance(wsr.doc_action, idempierewsc.enums.DocAction):
+                    model.append(self.create_element_0('docAction', str(wsr.doc_action.value)))
+                else:
+                    model.append(self.create_element_0('docAction', str(wsr.doc_action)))
+
             return model
         return self.create_element_0('NoModel')
 

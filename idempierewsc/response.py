@@ -21,6 +21,7 @@ along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 import idempierewsc.base
 import idempierewsc.enums
 import lxml.etree
+import copy
 
 
 class CompositeResponse(idempierewsc.base.WebServiceResponse):
@@ -157,15 +158,15 @@ class ResponseFactory(object):
 
             if len(wtd_responses) > 0:
                 temp_element = lxml.etree.Element("temp")
-                temp_element.append(wtd_responses[0])
+                temp_element.append(copy.deepcopy(wtd_responses[0]))
                 partial_response = self.create_window_tab_data_response(WindowTabDataResponse(), temp_element)
             elif len(process_responses) > 0:
                 temp_element = lxml.etree.Element("temp")
-                temp_element.append(wtd_responses[0])
+                temp_element.append(copy.deepcopy(wtd_responses[0]))
                 partial_response = self.create_run_process_response(RunProcessResponse(), temp_element)
             else:
                 temp_element = lxml.etree.Element("temp")
-                temp_element.append(sr)
+                temp_element.append(copy.deepcopy(sr))
                 partial_response = self.create_standard_response(StandardResponse(), temp_element)
 
             if not partial_response or partial_response.status == idempierewsc.enums.WebServiceResponseStatus.Error:

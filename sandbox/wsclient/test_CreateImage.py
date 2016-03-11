@@ -18,11 +18,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from idempierewsc.request import QueryDataRequest
+from idempierewsc.request import CreateDataRequest
+from idempierewsc.request import CompositeOperationRequest
 from idempierewsc.base import LoginRequest
+from idempierewsc.base import Operation
 from idempierewsc.enums import WebServiceResponseStatus
 from idempierewsc.net import WebServiceConnection
+from idempierewsc.base import Field
 import traceback
+import random
 
 url = 'http://localhost:8031'
 urls = 'https://localhost:8431'
@@ -34,11 +38,25 @@ login.role_id = 102
 login.password = 'System'
 login.user = 'SuperUser'
 
-query = QueryDataRequest()
-query.web_service_type = 'QueryBPartnerTest'
-query.offset = 2
-query.limit = 5
-query.login = login
+path_image = '../../documents/idempiere-logo.png'
+
+ws1 = CreateDataRequest()
+ws1.web_service_type = 'CreateImageTest'
+ws1.data_row = [Field('Name', path_image), Field('Description', 'Test Create BPartner and Logo')]
+binary_field = Field('BinaryData')
+binary_field.set_byte_value(open(path_image, 'rb').read())
+ws1.data_row.append(binary_field)
+
+ws2 = CreateDataRequest()
+ws2.web_service_type = 'CreateBPartnerTest'
+ws2.data_row = [Field('Name', 'Test BPartner'), Field('Value', random.randint(1000000, 10000000)),
+                Field('TaxID', '987654321'), Field('Logo_ID', '@AD_Image.AD_Image_ID')]
+
+ws0 = CompositeOperationRequest()
+ws0.login = login
+ws0.operations.append(Operation(ws1))
+ws0.operations.append(Operation(ws2))
+ws0.web_service_type = 'CompositeBPartnerTest'
 
 wsc = WebServiceConnection()
 wsc.url = urls
@@ -46,23 +64,18 @@ wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
 try:
-    response = wsc.send_request(query)
+    response = wsc.send_request(ws0)
     wsc.print_xml_request()
     wsc.print_xml_response()
 
     if response.status == WebServiceResponseStatus.Error:
         print('Error: ' + response.error_message)
     else:
-        print('Total Rows: ' + str(response.total_rows))
-        print('Num rows: ' + str(response.num_rows))
-        print('Start row: ' + str(response.start_row))
-        print('')
-        for row in response.data_set:
-            for field in row:
-                print(str(field.column) + ': ' + str(field.value))
-            print('')
+        print('Response: ' + str(response.web_service_response_model()))
+        for res in response.responses:
+            print('Response: ' + str(res.web_service_response_model()))
         print('---------------------------------------------')
-        print('Web Service Type: ' + query.web_service_type)
+        print('Web Service Type: ' + ws0.web_service_type)
         print('Attempts: ' + str(wsc.attempts_request))
         print('Time: ' + str(wsc.time_request))
 except:
