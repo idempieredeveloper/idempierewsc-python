@@ -3,7 +3,7 @@ idempierewsc-python
 
 Description
 -----------
-iDempiere Python WebService Client is a Soap Client for
+iDempiere Python Web Service Client is a Soap Client for
 iDempiere ERP (http://www.idempiere.org).
 It allows the programmer to abstract the generation of XML requests, making development easier. This implementation can be used in Python 2.7, see requirements.txt file.
 
@@ -23,7 +23,7 @@ Features
 
 Links
 -----
-- iDempiere Webservices: http://wiki.idempiere.org/en/Web_services
+- iDempiere Web Services: http://wiki.idempiere.org/en/Web_services
 
 
 Installation
@@ -207,6 +207,6 @@ Time: 3103
 
 - iDempiere Output:
 
-![Captura 1](/documents/idempiere-printscreen1.png)
+![](/documents/idempiere-printscreen1.png)
 
-![Captura 2](/documents/idempiere-printscreen2.png)
+![](/documents/idempiere-printscreen2.png)
