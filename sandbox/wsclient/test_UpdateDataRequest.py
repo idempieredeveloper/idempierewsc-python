@@ -38,7 +38,7 @@ login.user = 'SuperUser'
 ws = UpdateDataRequest()
 ws.web_service_type = 'UpdateBPartnerTest'
 ws.login = login
-ws.record_id = 1000085
+ws.record_id = 1000087
 
 ws.data_row = [Field('Name', 'Test BPartner Updated')]
 

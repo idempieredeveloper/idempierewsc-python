@@ -37,7 +37,7 @@ login.user = 'SuperUser'
 ws = DeleteDataRequest()
 ws.web_service_type = 'DeleteBPartnerTest'
 ws.login = login
-ws.record_id = 1000086
+ws.record_id = 1000085
 
 wsc = WebServiceConnection()
 wsc.url = urls

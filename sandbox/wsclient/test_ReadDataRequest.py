@@ -37,7 +37,7 @@ login.user = 'SuperUser'
 ws = ReadDataRequest()
 ws.web_service_type = 'ReadBPartnerTest'
 ws.login = login
-ws.record_id = 1000085
+ws.record_id = 1000086
 
 wsc = WebServiceConnection()
 wsc.url = urls

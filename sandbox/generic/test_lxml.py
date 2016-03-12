@@ -41,5 +41,5 @@ body.append(etree.Element("{http://idempiere.org/ADInterface/1_0}createData"))
 body.set('hi','hello')
 print(etree.tostring(root, pretty_print=True))
 
-root2 = etree.parse("../documents/CreateBPartnerTest_request.xml")
-#print(etree.tostring(root2, pretty_print=True))
+root2 = etree.parse("../../documents/CreateBPartnerTest_request.xml")
+print(etree.tostring(root2, pretty_print=True))

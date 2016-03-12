@@ -22,6 +22,7 @@ import idempierewsc.base
 import idempierewsc.enums
 import datetime
 import lxml.etree
+import sys
 
 
 class CompositeOperationRequest(idempierewsc.base.CompositeRequest):
@@ -488,7 +489,11 @@ class RequestFactory(object):
             elif isinstance(value, idempierewsc.enums.DocStatus):
                 temp_value = value.value
             else:
-                temp_value = str(value).decode('utf-8')
+                if sys.version_info[0] == '2':
+                    temp_value = str(value).decode('UTF-8')
+                else:
+                    # Python 3 Code, sys.version_info[0] == '3'
+                    temp_value = str(value)
 
             field.append(self.create_element_0('val', temp_value))
 

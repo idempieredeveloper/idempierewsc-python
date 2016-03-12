@@ -20,4 +20,4 @@ along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 
 name = "iDempiere Web Service Client";
 component_name = "idempierewsc";
-version = "1.0.0";
+version = "1.0.1";
