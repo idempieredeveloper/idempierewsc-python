@@ -25,7 +25,7 @@ requirements = parse_requirements('requirements.txt', session=False)
 
 setup(
         name='idempierewsc',
-        version='1.0.0',
+        version='1.0.1',
         packages=['idempierewsc'],
         url='https://github.com/sauljabin/idempierewsc-python',
         license='LGPL 3',

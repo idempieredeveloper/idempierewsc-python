@@ -25,9 +25,9 @@ namespace_0 = "http://idempiere.org/ADInterface/1_0";
 prefix_soapenv = "soapenv";
 namespace_soapenv = "http://schemas.xmlsoap.org/soap/envelope/";
 
-#root = etree.parse("../documents/QueryBPartnerTest_response.xml")
-root = etree.parse("../documents/StandardResponseError_Example.xml")
-fault = etree.parse("../documents/Fault_response.xml")
+# root = etree.parse("../../documents/QueryBPartnerTest_response.xml")
+root = etree.parse("../../documents/StandardResponseError_Example.xml")
+fault = etree.parse("../../documents/Fault_response.xml")
 print(etree.tostring(root, pretty_print=True))
 print(etree.tostring(fault, pretty_print=True))
 
@@ -65,5 +65,3 @@ for element in root.iter():
 
     print(find_elements_0(element, 'StandardResponse')[0].get('RecordIDe'))
     break
-
-

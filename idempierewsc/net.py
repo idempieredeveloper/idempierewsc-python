@@ -54,6 +54,7 @@ class WebServiceConnection(object):
         self.response_status = ''
         self.xml_request = None
         self.xml_response = None
+        self.proxies = {}
 
     def user_agent(self):
         """
@@ -128,7 +129,7 @@ class WebServiceConnection(object):
                 r = requests.post(self.web_service_url(), data=data_request,
                                   headers={self.CONTENT_TYPE_HEADER: self.CONTENT_TYPE,
                                            self.USE_AGENT_HEADER: self.user_agent()},
-                                  verify=False, timeout=(float(self.timeout) / 1000.))
+                                  verify=False, timeout=(float(self.timeout) / 1000.), proxies=self.proxies)
 
                 if r.status_code != requests.codes.ok:
                     r.raise_for_status()
@@ -141,9 +142,9 @@ class WebServiceConnection(object):
                     self.time_request = int(time.time() * 1000.) - start_time
                     if isinstance(e, requests.exceptions.ReadTimeout):
                         raise idempierewsc.exception.WebServiceTimeoutException(
-                                'Timeout exception, operation has expired', e)
+                                'Timeout exception, operation has expired' + str(e.message), e)
                     else:
-                        raise idempierewsc.exception.WebServiceException('Error sending request', e)
+                        raise idempierewsc.exception.WebServiceException('Error sending request: ' + str(e.message), e)
                 else:
                     time.sleep(float(self.attempts_timeout) / 1000.)
 

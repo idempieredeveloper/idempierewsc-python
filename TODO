@@ -4,5 +4,5 @@
 - [x] Setup.py
 - [x] Source Documentation
 - [x] Test Installation
-- [ ] Improve management of proxy connection
-- [ ] Python 3
+- [x] Improve management of proxy connection
+- [x] Python 3

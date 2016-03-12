@@ -25,8 +25,9 @@ urls = 'https://localhost:8431/ADInterface/services/ModelADService'
 
 
 def test_xml():
-    test_file = open('../documents/ReadBPartnerTest_request.xml', 'r')
+    test_file = open('../../documents/ReadBPartnerTest_request.xml', 'r')
     return test_file.read()
+
 
 wsc = WebServiceConnection()
 wsc.url = urls
@@ -34,7 +35,7 @@ wsc.attempts = 3
 try:
     response = wsc.send_request(test_xml())
 except Exception as e:
-    print('Error'+e.message)
+    print('Error' + str(e.message))
 else:
     wsc.print_xml_response()
 finally:

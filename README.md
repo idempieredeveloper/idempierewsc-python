@@ -5,7 +5,7 @@ Description
 -----------
 iDempiere Python Web Service Client is a Soap Client for
 iDempiere ERP (http://www.idempiere.org).
-It allows the programmer to abstract the generation of XML requests, making development easier. This implementation can be used in Python 2.7, see requirements.txt file.
+It allows the programmer to abstract the generation of XML requests, making development easier. This implementation can be used in Python 2.7, 3.4, see requirements.txt file.
 
 Data GardenWorld documents/Test WebServices 2Pack.zip.
 Examples are available in the sandbox folder.
@@ -16,9 +16,9 @@ Features
 - Copyright: 2016 Saúl Piña <sauljabin@gmail.com>
 - Repository: https://github.com/sauljabin/idempierewsc-python
 - License: LGPL 3 http://www.gnu.org/licenses/lgpl-3.0.html
-- Language: Python 2.7
+- Language: Python 2.7, Python 3.4
 - IDE: PyCharm
-- Version: v1.0.0
+- Version: v1.0.1
 
 
 Links
@@ -38,17 +38,17 @@ Example Create BPartner and Image
 
 ```python
 # IMPORT idempierewsc
-from idempierewsc.request import CreateDataRequest
-from idempierewsc.request import CompositeOperationRequest
 from idempierewsc.base import LoginRequest
 from idempierewsc.base import Operation
+from idempierewsc.base import Field
+from idempierewsc.request import CreateDataRequest
+from idempierewsc.request import CompositeOperationRequest
 from idempierewsc.enums import WebServiceResponseStatus
 from idempierewsc.net import WebServiceConnection
-from idempierewsc.base import Field
 import traceback
 import random
 
-# SET THE URL OF IDEMPIERE
+# SET URL
 urls = 'https://localhost:8431'
 
 # CREATE LOGIN
@@ -59,22 +59,26 @@ login.role_id = 102
 login.password = 'System'
 login.user = 'SuperUser'
 
-# SET THE PATH OF IMAGE
+# CREATE WEBSERVICE FOR IMAGE
 path_image = '../../documents/idempiere-logo.png'
 
-# CRATE IMAGE
 ws1 = CreateDataRequest()
 ws1.web_service_type = 'CreateImageTest'
-ws1.data_row = [Field('Name', path_image), Field('Description', 'Test Create BPartner and Logo')]
+ws1.data_row.append(Field('Name', path_image))
+ws1.data_row.append(Field('Description', 'Test Create BPartner and Logo'))
+
+# CREATE BINARY FIELD
 binary_field = Field('BinaryData')
 binary_field.set_byte_value(open(path_image, 'rb').read())
 ws1.data_row.append(binary_field)
 
-# CREATE BPartner
+# CREATE WEBSERVICE FOR BPARTNER
 ws2 = CreateDataRequest()
 ws2.web_service_type = 'CreateBPartnerTest'
-ws2.data_row = [Field('Name', 'Test BPartner'), Field('Value', random.randint(1000000, 10000000)),
-                Field('TaxID', '987654321'), Field('Logo_ID', '@AD_Image.AD_Image_ID')]
+ws2.data_row.append(Field('Name', 'Test BPartner'))
+ws2.data_row.append(Field('Value', random.randint(1000000, 10000000)))
+ws2.data_row.append(Field('TaxID', '987654321'))
+ws2.data_row.append(Field('Logo_ID', '@AD_Image.AD_Image_ID'))
 
 # CREATE COMPOSITE
 ws0 = CompositeOperationRequest()
@@ -83,18 +87,19 @@ ws0.operations.append(Operation(ws1))
 ws0.operations.append(Operation(ws2))
 ws0.web_service_type = 'CompositeBPartnerTest'
 
-# CREATE CLIENT
+# CREATE CONNECTION
 wsc = WebServiceConnection()
 wsc.url = urls
 wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
-# SEND REQUEST
+# SEND CONNECTION
 try:
     response = wsc.send_request(ws0)
     wsc.print_xml_request()
     wsc.print_xml_response()
 
+# GET THE RESPONSE
     if response.status == WebServiceResponseStatus.Error:
         print('Error: ' + response.error_message)
     else:
@@ -210,3 +215,15 @@ Time: 3103
 ![](/documents/idempiere-printscreen1.png)
 
 ![](/documents/idempiere-printscreen2.png)
+
+- Proxy Example, read http://docs.python-requests.org/en/master/user/advanced/:
+```python
+wsc = WebServiceConnection()
+wsc.url = urls
+wsc.attempts = 3
+wsc.app_name = 'Test from python'
+wsc.proxies= {
+  'http': 'http://10.10.1.10:3128',
+  'https': 'http://10.10.1.10:1080',
+}
+```

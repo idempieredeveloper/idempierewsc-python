@@ -50,7 +50,7 @@ def test_xml():
 
 
 def test_xml_file():
-    test_file = open('../documents/CreateBPartnerTest_request.xml', 'r')
+    test_file = open('../../documents/CreateBPartnerTest_request.xml', 'r')
     return test_file.read()
 
 
@@ -63,6 +63,6 @@ try:
 except Exception as e:
     print(e)
 else:
-    print('Status:' + r.status_code)
-    print('Headers:' + r.headers)
-    print('Response:' + r.text)
+    print('Status:' + str(r.status_code))
+    print('Headers:' + str(r.headers))
+    print('Response:' + str(r.text))
