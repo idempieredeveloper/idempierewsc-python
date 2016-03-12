@@ -38,17 +38,17 @@ Example Create BPartner and Image
 
 ```python
 # IMPORT idempierewsc
-from idempierewsc.request import CreateDataRequest
-from idempierewsc.request import CompositeOperationRequest
 from idempierewsc.base import LoginRequest
 from idempierewsc.base import Operation
+from idempierewsc.base import Field
+from idempierewsc.request import CreateDataRequest
+from idempierewsc.request import CompositeOperationRequest
 from idempierewsc.enums import WebServiceResponseStatus
 from idempierewsc.net import WebServiceConnection
-from idempierewsc.base import Field
 import traceback
 import random
 
-# SET THE URL OF IDEMPIERE
+# SET URL
 urls = 'https://localhost:8431'
 
 # CREATE LOGIN
@@ -59,22 +59,26 @@ login.role_id = 102
 login.password = 'System'
 login.user = 'SuperUser'
 
-# SET THE PATH OF IMAGE
+# CREATE WEBSERVICE FOR IMAGE
 path_image = '../../documents/idempiere-logo.png'
 
-# CRATE IMAGE
 ws1 = CreateDataRequest()
 ws1.web_service_type = 'CreateImageTest'
-ws1.data_row = [Field('Name', path_image), Field('Description', 'Test Create BPartner and Logo')]
+ws1.data_row.append(Field('Name', path_image))
+ws1.data_row.append(Field('Description', 'Test Create BPartner and Logo'))
+
+# CREATE BINARY FIELD
 binary_field = Field('BinaryData')
 binary_field.set_byte_value(open(path_image, 'rb').read())
 ws1.data_row.append(binary_field)
 
-# CREATE BPartner
+# CREATE WEBSERVICE FOR BPARTNER
 ws2 = CreateDataRequest()
 ws2.web_service_type = 'CreateBPartnerTest'
-ws2.data_row = [Field('Name', 'Test BPartner'), Field('Value', random.randint(1000000, 10000000)),
-                Field('TaxID', '987654321'), Field('Logo_ID', '@AD_Image.AD_Image_ID')]
+ws2.data_row.append(Field('Name', 'Test BPartner'))
+ws2.data_row.append(Field('Value', random.randint(1000000, 10000000)))
+ws2.data_row.append(Field('TaxID', '987654321'))
+ws2.data_row.append(Field('Logo_ID', '@AD_Image.AD_Image_ID'))
 
 # CREATE COMPOSITE
 ws0 = CompositeOperationRequest()
@@ -83,18 +87,19 @@ ws0.operations.append(Operation(ws1))
 ws0.operations.append(Operation(ws2))
 ws0.web_service_type = 'CompositeBPartnerTest'
 
-# CREATE CLIENT
+# CREATE CONNECTION
 wsc = WebServiceConnection()
 wsc.url = urls
 wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
-# SEND REQUEST
+# SEND CONNECTION
 try:
     response = wsc.send_request(ws0)
     wsc.print_xml_request()
     wsc.print_xml_response()
 
+# GET THE RESPONSE
     if response.status == WebServiceResponseStatus.Error:
         print('Error: ' + response.error_message)
     else:

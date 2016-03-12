@@ -141,9 +141,9 @@ class WebServiceConnection(object):
                     self.time_request = int(time.time() * 1000.) - start_time
                     if isinstance(e, requests.exceptions.ReadTimeout):
                         raise idempierewsc.exception.WebServiceTimeoutException(
-                                'Timeout exception, operation has expired', e)
+                            'Timeout exception, operation has expired' + str(e.message), e)
                     else:
-                        raise idempierewsc.exception.WebServiceException('Error sending request', e)
+                        raise idempierewsc.exception.WebServiceException('Error sending request: ' + str(e.message), e)
                 else:
                     time.sleep(float(self.attempts_timeout) / 1000.)
 
