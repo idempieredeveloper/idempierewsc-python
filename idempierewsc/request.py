@@ -226,7 +226,10 @@ class RequestFactory(object):
         """
         element = lxml.etree.Element('{%s}%s' % (self.NAMESPACE_0, name))
         if text:
-            element.text = str(text)
+            if isinstance(text,str):
+                element.text = text.decode('utf-8')
+            else:
+                element.text = str(text)
         return element
 
     def create_element_soapenv(self, name, text=None):
