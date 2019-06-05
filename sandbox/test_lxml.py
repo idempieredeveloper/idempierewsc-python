@@ -20,6 +20,8 @@ along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 
 from lxml import etree
 
+from idempierewsc.enums import Encoding
+
 prefix_0 = "_0";
 namespace_0 = "http://idempiere.org/ADInterface/1_0";
 prefix_soapenv = "soapenv";
@@ -38,8 +40,9 @@ root.append(etree.Element("{http://schemas.xmlsoap.org/soap/envelope/}Header"))
 body = etree.Element("{http://schemas.xmlsoap.org/soap/envelope/}Body")
 root.append(body)
 body.append(etree.Element("{http://idempiere.org/ADInterface/1_0}createData"))
-body.set('hi','hello')
-print(etree.tostring(root, pretty_print=True))
+body.set('hi', 'hello')
+print(type(etree.tostring(root, pretty_print=True)))
+print(etree.tostring(root, pretty_print=True).decode(Encoding.UTF8.value))
 
-root2 = etree.parse("../../documents/CreateBPartnerTest_request.xml")
-print(etree.tostring(root2, pretty_print=True))
+root2 = etree.parse("../documents/CreateBPartnerTest_request.xml")
+print(etree.tostring(root2, pretty_print=True).decode(Encoding.UTF8.value))

@@ -18,20 +18,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import random
+import traceback
+
+from idempierewsc.base import Field
 from idempierewsc.base import LoginRequest
 from idempierewsc.base import Operation
-from idempierewsc.base import Field
-from idempierewsc.request import CreateDataRequest
-from idempierewsc.request import CompositeOperationRequest
 from idempierewsc.enums import WebServiceResponseStatus
 from idempierewsc.net import WebServiceConnection
-import traceback
-import random
-
-url = 'http://localhost:8031'
-urls = 'https://localhost:8431'
+from idempierewsc.request import CompositeOperationRequest
+from idempierewsc.request import CreateDataRequest
 
 # CREATE LOGIN
+from sandbox import IDEMPIERE_URL
+
 login = LoginRequest()
 login.client_id = 11
 login.org_id = 0
@@ -40,7 +40,7 @@ login.password = 'System'
 login.user = 'SuperUser'
 
 # CREATE WEBSERVICE FOR IMAGE
-path_image = '../../documents/idempiere-logo.png'
+path_image = '../documents/idempiere-logo.png'
 
 ws1 = CreateDataRequest()
 ws1.web_service_type = 'CreateImageTest'
@@ -69,7 +69,7 @@ ws0.web_service_type = 'CompositeBPartnerTest'
 
 # CREATE CONNECTION
 wsc = WebServiceConnection()
-wsc.url = urls
+wsc.url = IDEMPIERE_URL
 wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
@@ -79,7 +79,7 @@ try:
     wsc.print_xml_request()
     wsc.print_xml_response()
 
-# GET THE RESPONSE
+    # GET THE RESPONSE
     if response.status == WebServiceResponseStatus.Error:
         print('Error: ' + response.error_message)
     else:

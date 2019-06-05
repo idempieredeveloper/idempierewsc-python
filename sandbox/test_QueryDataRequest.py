@@ -18,14 +18,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from idempierewsc.request import ReadDataRequest
+import traceback
+
 from idempierewsc.base import LoginRequest
 from idempierewsc.enums import WebServiceResponseStatus
 from idempierewsc.net import WebServiceConnection
-import traceback
-
-url = 'http://localhost:8031'
-urls = 'https://localhost:8431'
+from idempierewsc.request import QueryDataRequest
+from sandbox import IDEMPIERE_URL
 
 login = LoginRequest()
 login.client_id = 11
@@ -34,36 +33,35 @@ login.role_id = 102
 login.password = 'System'
 login.user = 'SuperUser'
 
-ws = ReadDataRequest()
-ws.web_service_type = 'ReadImageTest'
-ws.login = login
-ws.record_id = 1000002
+query = QueryDataRequest()
+query.web_service_type = 'QueryBPartnerTest'
+query.offset = 2
+query.limit = 5
+query.login = login
 
 wsc = WebServiceConnection()
-wsc.url = urls
+wsc.url = IDEMPIERE_URL
 wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
 try:
-    response = wsc.send_request(ws)
+    response = wsc.send_request(query)
     wsc.print_xml_request()
     wsc.print_xml_response()
 
     if response.status == WebServiceResponseStatus.Error:
         print('Error: ' + response.error_message)
     else:
+        print('Total Rows: ' + str(response.total_rows))
         print('Num rows: ' + str(response.num_rows))
+        print('Start row: ' + str(response.start_row))
         print('')
         for row in response.data_set:
             for field in row:
                 print(str(field.column) + ': ' + str(field.value))
-                if str(field.column) == 'BinaryData':
-                    file = open('newfile.png', 'wb')
-                    file.write(field.get_byte_value())
-                    file.close()
             print('')
         print('---------------------------------------------')
-        print('Web Service Type: ' + ws.web_service_type)
+        print('Web Service Type: ' + query.web_service_type)
         print('Attempts: ' + str(wsc.attempts_request))
         print('Time: ' + str(wsc.time_request))
 except:

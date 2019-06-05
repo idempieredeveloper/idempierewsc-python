@@ -18,16 +18,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from idempierewsc.request import CreateDataRequest
+import traceback
+
 from idempierewsc.base import LoginRequest
+from idempierewsc.enums import DocAction
 from idempierewsc.enums import WebServiceResponseStatus
 from idempierewsc.net import WebServiceConnection
-from idempierewsc.base import Field
-import traceback
-import random
-
-url = 'http://localhost:8031'
-urls = 'https://localhost:8431'
+from idempierewsc.request import SetDocActionRequest
+from sandbox import IDEMPIERE_URL
 
 login = LoginRequest()
 login.client_id = 11
@@ -36,15 +34,14 @@ login.role_id = 102
 login.password = 'System'
 login.user = 'SuperUser'
 
-ws = CreateDataRequest()
-ws.web_service_type = 'CreateBPartnerTest'
+ws = SetDocActionRequest()
+ws.web_service_type = 'DocActionInvoiceTest'
 ws.login = login
-
-ws.data_row = [Field('Name', 'Test BPartner'), Field('Value', random.randint(1000000, 10000000)),
-               Field('TaxID', '987654321')]
+ws.doc_action = DocAction.Complete
+ws.record_id = 1000002
 
 wsc = WebServiceConnection()
-wsc.url = urls
+wsc.url = IDEMPIERE_URL
 wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
@@ -57,8 +54,6 @@ try:
         print('Error: ' + response.error_message)
     else:
         print('RecordID: ' + str(response.record_id))
-        for field in response.output_fields:
-            print(str(field.column) + ': ' + str(field.value))
         print('---------------------------------------------')
         print('Web Service Type: ' + ws.web_service_type)
         print('Attempts: ' + str(wsc.attempts_request))

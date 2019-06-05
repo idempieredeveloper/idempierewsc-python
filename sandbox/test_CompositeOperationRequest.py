@@ -18,19 +18,18 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from idempierewsc.request import CreateDataRequest
-from idempierewsc.request import CompositeOperationRequest
-from idempierewsc.request import SetDocActionRequest
-from idempierewsc.base import LoginRequest
-from idempierewsc.base import Operation
-from idempierewsc.enums import WebServiceResponseStatus
-from idempierewsc.net import WebServiceConnection
-from idempierewsc.base import Field
-from idempierewsc.enums import DocAction
 import traceback
 
-url = 'http://localhost:8031'
-urls = 'https://localhost:8431'
+from idempierewsc.base import Field
+from idempierewsc.base import LoginRequest
+from idempierewsc.base import Operation
+from idempierewsc.enums import DocAction
+from idempierewsc.enums import WebServiceResponseStatus
+from idempierewsc.net import WebServiceConnection
+from idempierewsc.request import CompositeOperationRequest
+from idempierewsc.request import CreateDataRequest
+from idempierewsc.request import SetDocActionRequest
+from sandbox import IDEMPIERE_URL
 
 login = LoginRequest()
 login.client_id = 11
@@ -62,7 +61,7 @@ ws0.operations.append(Operation(ws3))
 ws0.web_service_type = 'CompositeMovementTest'
 
 wsc = WebServiceConnection()
-wsc.url = urls
+wsc.url = IDEMPIERE_URL
 wsc.attempts = 3
 wsc.app_name = 'Test from python'
 

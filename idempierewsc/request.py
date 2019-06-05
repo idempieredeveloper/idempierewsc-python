@@ -18,11 +18,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import datetime
+
+import lxml.etree
+
 import idempierewsc.base
 import idempierewsc.enums
-import datetime
-import lxml.etree
-import sys
 
 
 class CompositeOperationRequest(idempierewsc.base.CompositeRequest):
@@ -226,10 +227,7 @@ class RequestFactory(object):
         """
         element = lxml.etree.Element('{%s}%s' % (self.NAMESPACE_0, name))
         if text:
-            if isinstance(text,str):
-                element.text = text.decode('utf-8')
-            else:
-                element.text = str(text)
+            element.text = str(text)
         return element
 
     def create_element_soapenv(self, name, text=None):
@@ -492,11 +490,7 @@ class RequestFactory(object):
             elif isinstance(value, idempierewsc.enums.DocStatus):
                 temp_value = value.value
             else:
-                if sys.version_info[0] == '2':
-                    temp_value = str(value).decode('UTF-8')
-                else:
-                    # Python 3 Code, sys.version_info[0] == '3'
-                    temp_value = str(value)
+                temp_value = str(value)
 
             field.append(self.create_element_0('val', temp_value))
 

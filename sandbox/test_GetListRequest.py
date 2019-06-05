@@ -18,14 +18,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from idempierewsc.request import DeleteDataRequest
+import traceback
+
 from idempierewsc.base import LoginRequest
 from idempierewsc.enums import WebServiceResponseStatus
 from idempierewsc.net import WebServiceConnection
-import traceback
-
-url = 'http://localhost:8031'
-urls = 'https://localhost:8431'
+from idempierewsc.request import GetListRequest
+from sandbox import IDEMPIERE_URL
 
 login = LoginRequest()
 login.client_id = 11
@@ -34,13 +33,13 @@ login.role_id = 102
 login.password = 'System'
 login.user = 'SuperUser'
 
-ws = DeleteDataRequest()
-ws.web_service_type = 'DeleteBPartnerTest'
+ws = GetListRequest()
+ws.web_service_type = 'GetListTest'
 ws.login = login
-ws.record_id = 1000085
+ws.ad_reference_id = 350
 
 wsc = WebServiceConnection()
-wsc.url = urls
+wsc.url = IDEMPIERE_URL
 wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
@@ -52,7 +51,14 @@ try:
     if response.status == WebServiceResponseStatus.Error:
         print('Error: ' + response.error_message)
     else:
-        print('RecordID: ' + str(response.record_id))
+        print('Total Rows: ' + str(response.total_rows))
+        print('Num rows: ' + str(response.num_rows))
+        print('Start row: ' + str(response.start_row))
+        print('')
+        for row in response.data_set:
+            for field in row:
+                print(str(field.column) + ': ' + str(field.value))
+            print('')
         print('---------------------------------------------')
         print('Web Service Type: ' + ws.web_service_type)
         print('Attempts: ' + str(wsc.attempts_request))

@@ -18,15 +18,18 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import time
 import platform
+import time
+
+import lxml.etree
 import requests
+
 import idempierewsc
+import idempierewsc.base
 import idempierewsc.exception
 import idempierewsc.request
 import idempierewsc.response
-import idempierewsc.base
-import lxml.etree
+from idempierewsc.enums import Encoding
 
 
 class WebServiceConnection(object):
@@ -40,7 +43,6 @@ class WebServiceConnection(object):
     DEFAULT_TIMEOUT = 5000
     DEFAULT_ATTEMPTS = 1
     DEFAULT_ATTEMPTS_TIMEOUT = 500
-    ENCODING_UTF_8 = 'UTF-8'
 
     def __init__(self):
         self.attempts = self.DEFAULT_ATTEMPTS
@@ -110,7 +112,7 @@ class WebServiceConnection(object):
             self.request = request
             factory = idempierewsc.request.RequestFactory()
             self.xml_request = factory.create_request(request)
-            data_request = lxml.etree.tostring(self.xml_request, encoding=self.ENCODING_UTF_8)
+            data_request = lxml.etree.tostring(self.xml_request, encoding=Encoding.UTF8.value)
             response_model = request.web_service_response_model()
         else:
             self.request = None
@@ -142,7 +144,7 @@ class WebServiceConnection(object):
                     self.time_request = int(time.time() * 1000.) - start_time
                     if isinstance(e, requests.exceptions.ReadTimeout):
                         raise idempierewsc.exception.WebServiceTimeoutException(
-                                'Timeout exception, operation has expired' + str(e.message), e)
+                            'Timeout exception, operation has expired' + str(e.message), e)
                     else:
                         raise idempierewsc.exception.WebServiceException('Error sending request: ' + str(e.message), e)
                 else:
@@ -163,16 +165,16 @@ class WebServiceConnection(object):
         Print the request
         :return: None
         """
-        st = lxml.etree.tostring(self.xml_request, pretty_print=True, encoding=self.ENCODING_UTF_8)
-        print(st.decode(self.ENCODING_UTF_8))
+        st = lxml.etree.tostring(self.xml_request, pretty_print=True, encoding=Encoding.UTF8.value)
+        print(st.decode(Encoding.UTF8.value))
 
     def print_xml_response(self):
         """
         Print the response
         :return: None
         """
-        st = lxml.etree.tostring(self.xml_response, pretty_print=True, encoding=self.ENCODING_UTF_8)
-        print(st.decode(self.ENCODING_UTF_8))
+        st = lxml.etree.tostring(self.xml_response, pretty_print=True, encoding=Encoding.UTF8.value)
+        print(st.decode(Encoding.UTF8.value))
 
     def save_xml_request(self, file_name):
         """
@@ -181,8 +183,8 @@ class WebServiceConnection(object):
         :return: None
         """
         save_file = open(file_name, 'w')
-        save_file.write(lxml.etree.tostring(self.xml_request, pretty_print=True, encoding=self.ENCODING_UTF_8).decode(
-                self.ENCODING_UTF_8))
+        save_file.write(lxml.etree.tostring(self.xml_request, pretty_print=True, encoding=Encoding.UTF8.value).decode(
+            Encoding.UTF8.value))
         save_file.close()
 
     def save_xml_response(self, file_name):
@@ -192,6 +194,6 @@ class WebServiceConnection(object):
         :return: None
         """
         save_file = open(file_name, 'w')
-        save_file.write(lxml.etree.tostring(self.xml_response, pretty_print=True, encoding=self.ENCODING_UTF_8).decode(
-                self.ENCODING_UTF_8))
+        save_file.write(lxml.etree.tostring(self.xml_response, pretty_print=True, encoding=Encoding.UTF8.value).decode(
+            Encoding.UTF8.value))
         save_file.close()

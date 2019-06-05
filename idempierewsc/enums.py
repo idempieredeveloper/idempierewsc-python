@@ -238,3 +238,10 @@ class Language(enum.Enum):
     zh_HK = 'zh_HK'
     zh_SG = 'zh_SG'
     zh_TW = 'zh_TW'
+
+
+class Encoding(enum.Enum):
+    """
+    Encodings
+    """
+    UTF8 = 'UTF-8'

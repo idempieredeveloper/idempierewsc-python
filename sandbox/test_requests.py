@@ -20,10 +20,12 @@ along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 
 import requests
 
+from sandbox import IDEMPIERE_URL, IDEMPIERE_SSL_URL
+
 requests.packages.urllib3.disable_warnings()
 
-url = 'http://localhost:8031/ADInterface/services/ModelADService'
-urls = 'https://localhost:8431/ADInterface/services/ModelADService'
+url = IDEMPIERE_URL + '/ADInterface/services/ModelADService'
+urls = IDEMPIERE_SSL_URL + '/ADInterface/services/ModelADService'
 headers = {'user-agent': 'my-app/0.0.1', 'content-type': 'text/xml; charset=UTF-8'}
 
 
@@ -50,7 +52,7 @@ def test_xml():
 
 
 def test_xml_file():
-    test_file = open('../../documents/CreateBPartnerTest_request.xml', 'r')
+    test_file = open('../documents/CreateBPartnerTest_request.xml', 'r')
     return test_file.read()
 
 

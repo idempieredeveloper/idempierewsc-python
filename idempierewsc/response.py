@@ -18,10 +18,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import copy
+
+import lxml.etree
+
 import idempierewsc.base
 import idempierewsc.enums
-import lxml.etree
-import copy
 
 
 class CompositeResponse(idempierewsc.base.WebServiceResponse):

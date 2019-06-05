@@ -18,15 +18,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from idempierewsc.request import RunProcessRequest
-from idempierewsc.base import LoginRequest
-from idempierewsc.base import Field
-from idempierewsc.enums import WebServiceResponseStatus
-from idempierewsc.net import WebServiceConnection
 import traceback
 
-url = 'http://localhost:8031'
-urls = 'https://localhost:8431'
+from idempierewsc.base import Field
+from idempierewsc.base import LoginRequest
+from idempierewsc.enums import WebServiceResponseStatus
+from idempierewsc.net import WebServiceConnection
+from idempierewsc.request import UpdateDataRequest
+from sandbox import IDEMPIERE_URL
 
 login = LoginRequest()
 login.client_id = 11
@@ -35,13 +34,15 @@ login.role_id = 102
 login.password = 'System'
 login.user = 'SuperUser'
 
-ws = RunProcessRequest()
-ws.web_service_type = 'RunProcessValidateBPartnerTest'
+ws = UpdateDataRequest()
+ws.web_service_type = 'UpdateBPartnerTest'
 ws.login = login
-ws.param_values = [Field('C_BPartner_ID', '50003')]
+ws.record_id = 1000087
+
+ws.data_row = [Field('Name', 'Test BPartner Updated')]
 
 wsc = WebServiceConnection()
-wsc.url = urls
+wsc.url = IDEMPIERE_URL
 wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
@@ -53,7 +54,9 @@ try:
     if response.status == WebServiceResponseStatus.Error:
         print('Error: ' + response.error_message)
     else:
-        print(response.summary)
+        print('RecordID: ' + str(response.record_id))
+        for field in response.output_fields:
+            print(str(field.column) + ': ' + str(field.value))
         print('---------------------------------------------')
         print('Web Service Type: ' + ws.web_service_type)
         print('Attempts: ' + str(wsc.attempts_request))

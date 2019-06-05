@@ -18,14 +18,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with idempierewsc.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from idempierewsc.request import ReadDataRequest
+import traceback
+
 from idempierewsc.base import LoginRequest
 from idempierewsc.enums import WebServiceResponseStatus
 from idempierewsc.net import WebServiceConnection
-import traceback
-
-url = 'http://localhost:8031'
-urls = 'https://localhost:8431'
+from idempierewsc.request import ReadDataRequest
+from sandbox import IDEMPIERE_URL
 
 login = LoginRequest()
 login.client_id = 11
@@ -35,12 +34,12 @@ login.password = 'System'
 login.user = 'SuperUser'
 
 ws = ReadDataRequest()
-ws.web_service_type = 'ReadBPartnerTest'
+ws.web_service_type = 'ReadImageTest'
 ws.login = login
-ws.record_id = 1000086
+ws.record_id = 1000002
 
 wsc = WebServiceConnection()
-wsc.url = urls
+wsc.url = IDEMPIERE_URL
 wsc.attempts = 3
 wsc.app_name = 'Test from python'
 
@@ -57,6 +56,10 @@ try:
         for row in response.data_set:
             for field in row:
                 print(str(field.column) + ': ' + str(field.value))
+                if str(field.column) == 'BinaryData':
+                    file = open('newfile.png', 'wb')
+                    file.write(field.get_byte_value())
+                    file.close()
             print('')
         print('---------------------------------------------')
         print('Web Service Type: ' + ws.web_service_type)
