@@ -63,7 +63,7 @@ class Field(object):
         :return: None
         """
         if val:
-            self.value = base64.b64encode(val)
+            self.value = base64.b64encode(val).decode(idempierewsc.enums.Encoding.UTF8.value)
 
     def get_byte_value(self):
         """
