@@ -13,8 +13,6 @@ Examples are available in the sandbox folder.
 
 Features
 --------
-- Copyright: 2016 Saúl Piña <sauljabin@gmail.com>
-- Repository: https://github.com/sauljabin/idempierewsc-python
 - License: LGPL 3 http://www.gnu.org/licenses/lgpl-3.0.html
 - Language: Python 2.7, Python 3.4
 - IDE: PyCharm
