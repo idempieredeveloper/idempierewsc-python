@@ -26,7 +26,7 @@ Links
 
 Installation
 -----------
-- `$ git clone https://github.com/sauljabin/idempierewsc-python idempierewsc`
+- `$ git clone https://github.com/ingeint/idempierewsc-python idempierewsc`
 - `$ pip install -e idempierewsc`
 
 
